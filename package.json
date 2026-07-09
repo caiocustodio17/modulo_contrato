@@ -1,0 +1,49 @@
+{
+  "name": "wd_contratos",
+  "private": true,
+  "version": "1.0.5",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build --emptyOutDir",
+    "patch": "npm version patch && npm run build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "mock": "json-server -w -p8080 mock/db.json"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.6",
+    "@mui/x-data-grid": "^6.11.2",
+    "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "oauth-1.0a": "^2.2.6",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.4.120",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/node": "^20.5.2",
+    "@types/pdf2image": "^1.2.4",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "autoprefixer": "^10.4.15",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "pdf2image": "^1.2.3",
+    "postcss": "^8.4.28",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.3.3",
+    "vite": "^4.4.5"
+  }
+}

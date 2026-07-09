@@ -1,0 +1,75 @@
+import { useContratoContext } from "./useContratoContext";
+const exemploEnvio = {
+  "DECISAO": "",
+  "TMOV_T_CODFILIAL": "1",
+  "TFLUIG_T_APROVOU": "NAO",
+  "TFLUIG_T_VALORINICIALAPROV": "2000.01",
+  "TF_T_DATACANCELALCADA": "",
+  "TMOV_T_CODCOLCFO": "12",
+  "TF_T_DATAINICIO": "2023-08-01",
+  "TMOV_T_VALORLIQUIDO": null,
+  "TMOV_T_CODCOLIGADA": "12",
+  "funcao_aprovador": "Aprovador",
+  "mailUserCreation": "admin@redeinspiraeducadores.com.br",
+  "TF_T_DATATOL": "2023-12-30",
+  "TF_T_VALOR_10": "1.000,00",
+  "TF_T_VALOR_11": "1.000,00",
+  "TF_T_VALOR_12": "1.000,00",
+  "TMOV_T_CODVEN1": null,
+  "TMOV_T_VALOROUTROS": null,
+  "DESCRICAO_CODVEN2": null,
+  "TMOV_T_CODVEN2": null,
+  "TFLUIG_T_EXPLODEBUDGET": "NAO",
+  "TFLUIG_T_FIMAPROVACAO": "SIM",
+  "TMOV_T_CODCOLTBORCAMENTO": "",
+  "TMOV_T_DATAENTREGA": null,
+  "TF_T_VALOR_05": "1.000,00",
+  "TF_T_VALOR_06": "1.000,00",
+  "TF_T_VALOR_07": "1.000,00",
+  "TF_T_VALOR_08": "1.000,00",
+  "TF_T_VALOR_09": "1.000,00",
+  "TMOV_T_CODCCUSTO": "3.04.02",
+  "TFLUIG_T_CLICKORCAMENTO": "",
+  "DESCRICAO_CODCOLIGADA": "INSPIRA MUDANÇA",
+  "TF_T_VALOR_01": "1.000,00",
+  "DESCRICAO_CODCFO": "GEORGIA DA COSTA SILVA",
+  "TF_T_VALOR_02": "1.000,00",
+  "TF_T_VALOR_03": "1.000,00",
+  "TF_T_VALOR_04": "1.000,00",
+  "TMOV_T_CODCFO": "0279880",
+  "DESCRICAO_CODFILIAL": "INSPIRA MUDANÇA",
+  "TF_T_ESTOUROTOLERANCIA": "",
+  "TFLUIG_T_TBORCAMENTOLIST": "",
+  "TMOV_T_CGCCFO": "833.383.062-53",
+  "TMOV_T_HISTORICOLONGO": "TESTE 2",
+  "ORIGEM": "0",
+  "TF_T_CODCONTRATO": "TESTE 2",
+  "TF_T_CONTRATO": "TESTE 2",
+  "TFLUIG_T_INTERACTIONDETAIL": "",
+  "TMOV_T_CODTBORCAMENTO": "35.01.04",
+  "TF_T_DATAFIM": "2023-11-30",
+  "TFLUIG_T_CREATIONDATE": "22/08/2023 17:59:39",
+  "TMOV_T_VALORBRUTO": null,
+  "TMOV_T_DATAEXTRA1": null,
+  "TFLUIG_T_ROLEAPPROVERBUDGET": "",
+  "TF_T_APROVADORNATUREZA": "NAO",
+  "TMOV_T_CGCCOL": "28.580.065/0001-72",
+  "CODUSUARIO_CODVEN2": null,
+  "TFLUIG_T_VALORFINALAPROV": "25000.00",
+  "CODUSUARIO_CODVEN1": null,
+  "TMOV_T_TBORCAMENTO": "Softwares Recorrente",
+  "TMOV_T_CGCFIL": "28.580.065/0001-72",
+  "DESCRICAO_CODCCUSTO": "TI - Sistemas",
+  "TMOVCOMPL_T_SOLICITANTE": null,
+  "TF_T_VALORCONTRATO": "12.000,00"
+}
+export default function useCadastrarContratoFluig(){
+  const {contrato} = useContratoContext()
+  function montarFormulario(){
+    console.log('contrato fluig: ', contrato)
+    console.log('exemplo: ', exemploEnvio)
+  }
+
+  return{montarFormulario}
+}
+

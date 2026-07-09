@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+  font-size: small;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
