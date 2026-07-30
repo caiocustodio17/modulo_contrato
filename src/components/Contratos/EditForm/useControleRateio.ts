@@ -197,7 +197,7 @@ export function useControleRateio() {
 
   const validarPreRequisitos = () => {
     if (!contrato.TMOV_T_CODCOLIGADA || !contrato.TMOV_T_CODFILIAL) {
-      setError("Favor informar um destinatário.");
+      setError("Favor informar a coligada/filial do contrato.");
       setRateioCentroCustos([]);
       setIsLoading(false);
       setOpenCentroCusto(true);
@@ -248,7 +248,7 @@ export function useControleRateio() {
 
     if (!contrato.TMOV_T_CODCOLIGADA) {
       console.error("Erro: CODCOLIGADA não informada no contrato");
-      setError("Selecione a coligada no cabeçalho primeiro.");
+      setError("Informe a coligada/filial do contrato antes de buscar a natureza orçamentária.");
       return;
     }
 

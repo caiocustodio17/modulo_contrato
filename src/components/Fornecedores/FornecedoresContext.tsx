@@ -1,11 +1,22 @@
 import { ReactNode, createContext, useState } from "react";
 import { IFornecedor } from "../Contratos/ContratosTypes";
 
+export type IFornecedorSelecionado = IFornecedor & {
+  CODCFO?: string;
+  NOMEFANTASIA?: string;
+  CGCCFO?: string;
+  CODCOLIGADA?: string;
+};
+
 type FornecedorContextProps = {
   openFornecedor: boolean;
   setOpenFornecedor: (open: boolean) => void;
   fornecedores: IFornecedor[];
   setFornecedores: (fornecedor: IFornecedor[]) => void;
+  onSelectFornecedor: ((row: IFornecedorSelecionado) => void) | null;
+  setOnSelectFornecedor: (
+    callback: ((row: IFornecedorSelecionado) => void) | null,
+  ) => void;
 };
 
 const initialFornecedores: (IFornecedor & { ID: number })[] = [
@@ -32,6 +43,16 @@ export const FornecedorProvider: React.FC<FornecedorProviderProps> = ({
   const [fornecedores, setFornecedores] =
     useState<IFornecedor[]>(initialFornecedores);
   const [openFornecedor, setOpenFornecedor] = useState(false);
+  const [onSelectFornecedor, setOnSelectFornecedorState] = useState<
+    ((row: IFornecedorSelecionado) => void) | null
+  >(null);
+
+  function setOnSelectFornecedor(
+    callback: ((row: IFornecedorSelecionado) => void) | null,
+  ) {
+    setOnSelectFornecedorState(() => callback);
+  }
+
   return (
     <FornecedorContext.Provider
       value={{
@@ -39,6 +60,8 @@ export const FornecedorProvider: React.FC<FornecedorProviderProps> = ({
         setFornecedores,
         openFornecedor,
         setOpenFornecedor,
+        onSelectFornecedor,
+        setOnSelectFornecedor,
       }}
     >
       {children}

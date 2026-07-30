@@ -1,6 +1,8 @@
 import { Card, CardContent, Typography } from "@mui/material";
 import { indigo } from "@mui/material/colors";
 import AnexarDocumentosComponent from "../AnexarDocumentos/AnexarDocumentosComponent";
+import { CentroCustoProvider } from "../CentroCusto/CentroCustoContext";
+import { DestinatarioProvider } from "../Destinatarios/DestinatarioContext";
 import DadosPagamentoForm from "./DadosPagamentoForm";
 import HitoricoPagamentoForm from "./HistoricoPagamentoForm";
 import SolicitacaoPagamentoBotoes from "./SolicitacaoPagamentoBotoes";
@@ -12,7 +14,16 @@ export default function SolicitacaoPagamentoForm() {
     { title: "Dados Pagamento", component: <DadosPagamentoForm /> },
     { title: "Forma Pagamento", component: <DadosBancariosForm /> },
     { title: "Histório Nota", component: <HitoricoPagamentoForm /> },
-    { title: "Items Pagamento", component: <ItensPagamentoForm readOnly /> },
+    {
+      title: "Items Pagamento",
+      component: (
+        <DestinatarioProvider>
+          <CentroCustoProvider>
+            <ItensPagamentoForm readOnly />
+          </CentroCustoProvider>
+        </DestinatarioProvider>
+      ),
+    },
     { title: "Anexos", component: <AnexarDocumentosComponent /> },
   ];
 

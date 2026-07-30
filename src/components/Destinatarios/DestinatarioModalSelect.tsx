@@ -7,29 +7,34 @@ import { useContratoContext } from "../Contratos/hooks/useContratoContext";
 import ModalSelectorComponent from "../Global/ModalSelectorComponent";
 import { useDestinatarioContext } from "./useDestinatarioContext";
 
-export function DestinatarioModalSelect() {
-  const { openDestinatario, setOpenDestinatario, destinatarios, setDestinatarios } = useDestinatarioContext();
-  const { contrato, setContrato, error } = useContratoContext()
+type DestinatarioModalSelectProps = {
+  title?: string;
+  somenteColigadaFilial?: boolean;
+};
+
+export function DestinatarioModalSelect({
+  title = "Selecione a Escola",
+  somenteColigadaFilial = false,
+}: DestinatarioModalSelectProps) {
+  const { openDestinatario, setOpenDestinatario, destinatarios, setDestinatarios, onSelectDestinatario } = useDestinatarioContext();
+  const { error } = useContratoContext()
   const [data, setData] = useState<IDestinatario[]>([]);
-  const columnsDestinatario: GridColDef[] = [
-    { headerName: "Cód. Coligada", field: "CODCOLIGADA", width: 100 },
-    { headerName: "Cód. Filial", field: "CODFILIAL", width: 100 },
-    { headerName: "Nome", field: "NOMEFANTASIA", width: 300 },
-    { headerName: "Cnpj", field: "CGC", width: 150 },
-  ];
+  const columnsDestinatario: GridColDef[] = somenteColigadaFilial
+    ? [
+        { headerName: "Cód. Coligada", field: "CODCOLIGADA", width: 120 },
+        { headerName: "Cód. Filial", field: "CODFILIAL", width: 120 },
+      ]
+    : [
+        { headerName: "Cód. Coligada", field: "CODCOLIGADA", width: 100 },
+        { headerName: "Cód. Filial", field: "CODFILIAL", width: 100 },
+        { headerName: "Nome", field: "NOMEFANTASIA", width: 300 },
+        { headerName: "Cnpj", field: "CGC", width: 150 },
+      ];
   function handleRowSelectedClick(param: GridRowParams) {
     const { row } = param
-    setContrato({
-      ...contrato,
-      TMOV_T_CODCOLIGADA: row.CODCOLIGADA,
-      TMOV_T_CODFILIAL: row.CODFILIAL,
-      DESCRICAO_CODFILIAL: row.NOMEFANTASIA,
-      TMOV_T_CGCFIL: row.CGC,
-      TMOV_T_CGCCOL: row.TMOV_T_CGCCOL,
-      DESCRICAO_CODCOLIGADA: row.DESCRICAO_CODCOLIGADA
-     })
-     setOpenDestinatario(false)
-     setDestinatarios([])
+    onSelectDestinatario?.(row)
+    setOpenDestinatario(false)
+    setDestinatarios([])
   }
   useEffect(() => {
     setData(
@@ -40,7 +45,7 @@ export function DestinatarioModalSelect() {
   }, [destinatarios, openDestinatario])
   return (
     <ModalSelectorComponent
-      title="Selecione a Escola"
+      title={title}
       columns={columnsDestinatario}
       rows={data}
       onClose={() => setOpenDestinatario(false)}
