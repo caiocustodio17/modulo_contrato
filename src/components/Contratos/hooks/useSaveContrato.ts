@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import fluigConfig from "../../../config";
@@ -230,100 +229,141 @@ export default function useSaveContrato() {
         }
       });
     });
-    // --- TRATAMENTO DOS ITENS ---
-    listItems.forEach((item, index) => {
-      const n = index + 1;
-
-      // Função auxiliar para evitar "null" em campos de texto
-      const cleanValue = (val: unknown): string => {
-        const stringValue = String(val);
-        return stringValue.toLowerCase() === "null" || val === undefined ? "" : stringValue;
-      };
-
-      formFields[`TITMMOV_T_CODCOLIGADA___${n}`] = contrato.TMOV_T_CODCOLIGADA ?? "1";
-      formFields[`TITMMOV_T_IDMOV___${n}`] = "-1";
-      formFields[`TITMMOV_T_IDMOVHST___${n}`] = "-1";
-      formFields[`TITMMOV_T_NUMEROSEQUENCIAL___${n}`] = String(n);
-      formFields[`TITMMOV_T_NSEQITMMOV___${n}`] = String(n);
-      formFields[`TITMMOV_T_SEQF___${n}`] = cleanValue(item.TITMMOV_T_SEQF);
-      formFields[`TITMMOV_T_IDPRD___${n}`] = cleanValue(item.TITMMOV_T_IDPRD);
-      formFields[`TITMMOV_T_CODIGOPRD___${n}`] = cleanValue(item.TITMMOV_T_CODIGOPRD);
-      formFields[`TITMMOV_T_NOMEFANTASIA___${n}`] = cleanValue(item.TITMMOV_T_NOMEFANTASIA);
-      formFields[`TITMMOV_T_CODUND___${n}`] = cleanValue(item.TITMMOV_T_CODUND);
-      formFields[`TITMMOV_T_CODTBORCAMENTO___${n}`] = cleanValue(item.TITMMOV_T_CODTBORCAMENTO);
-      formFields[`TITMMOV_T_CODCOLTBORCAMENTO___${n}`] = "0";
-      formFields[`TITMMOV_T_DESCTBORCAMENTO___${n}`] = cleanValue(item.TITMMOV_T_DESCTBORCAMENTO);
-      formFields[`TITMMOV_T_QUANTIDADE___${n}`] = cleanValue(item.TITMMOV_T_QUANTIDADE);
-      formFields[`TITMMOV_T_PRECOUNITARIO___${n}`] = cleanValue(item.TITMMOV_T_PRECOUNITARIO);
-      formFields[`TITMMOV_T_VALORTOTALITEM___${n}`] = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
-      formFields[`TITMMOV_T_VALORBRUTOITEM___${n}`] = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
-      formFields[`TITMMOV_T_VALORLIQUIDO___${n}`] = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
-      formFields[`TITMMOV_T_VALORDESC___${n}`] = "0.00";
-      formFields[`TITMMOV_T_VALORDESP___${n}`] = "0.00";
-      formFields[`TITMMOV_T_PRECOTOTALEDITADO___${n}`] = "1";
-      formFields[`TITMMOV_T_STATUSF___${n}`] = "A";
-    });
-
-    // --- GERAÇÃO DO RESULTADO FINAL ---
-    const keys = Object.keys(formFields);
-    const formDataResult = keys.map((key) => {
-      return { name: key, value: formFields[key] };
-    });
-
-    // const data = {
-    //   targetState: 587,
-    //   targetAssignee: usuario,
-    //   subProcessTargetState: 0,
-    //   comment: "Inserido pela tela de cadastro e contrato.",
-    //   formFields,
-    // };
-
-    const data = {
-      processInstanceId: 0,
-      processId: "dw_cadastro_de_contrato",
-      version: processVersion,
-      taskUserId: window.WCMAPI.usercode,
-      completeTask: true,
-      currentMovto: 0,
-      managerMode: false,
-      selectedDestinyAfterAutomatic: -1,
-      conditionAfterAutomatic: -1,
-      selectedColleague: [],
-      comments: "Inserido pela tela de cadastro e contrato.",
-      newObservations: [],
-      appointments: [],
-      attachments: anexos,
-      digitalSignature: false,
-      formData: formDataResult,
-      isDigitalSigned: false,
-      versionDoc: 0,
-      selectedState: 587,
-      internalFields: [],
-      transferTaskAfterSelection: false,
-      currentState: 4,
+    // --- 1 SOLICITAÇÃO INDEPENDENTE POR LINHA DE ITEM ---
+    // Função auxiliar para evitar "null" em campos de texto
+    const cleanValue = (val: unknown): string => {
+      const stringValue = String(val);
+      return stringValue.toLowerCase() === "null" || val === undefined ? "" : stringValue;
     };
-    console.log("data - save", data);
 
-    return window.location.host.includes("localhost")
-      ? data
-      : await axios
-        .post("/ecm/api/rest/ecm/workflowView/send", data)
-        .then((d: any) => {
-          const result = d.data.content;
-          if (result.processInstanceId) {
-            setNotaSelecionada({});
-            setContrato({} as IContratoData);
-            setOpenEdit(false);
-            window.open(
-              fluigConfig.visualizarProcesso + result.processInstanceId,
-              "_blank",
-            );
-          }
-        })
-        .catch((e) => {
-          setError(JSON.stringify(e.response.data));
-          setOpenError(true);
-        });
+    const isLocal = window.location.host.includes("localhost");
+    const results: any[] = [];
+    const erros: string[] = [];
+
+    for (const item of listItems) {
+      const formFieldsItem: any = { ...formFields };
+
+      formFieldsItem.TITMMOV_T_CODCOLIGADA___1 =
+        cleanValue(item.TITMMOV_T_CODCOLIGADA) || contrato.TMOV_T_CODCOLIGADA || "1";
+      formFieldsItem.TITMMOV_T_CODFILIAL___1 =
+        cleanValue(item.TITMMOV_T_CODFILIAL) || contrato.TMOV_T_CODFILIAL || "";
+      formFieldsItem.TITMMOV_T_CGCFIL___1 =
+        cleanValue(item.TITMMOV_T_CGCFIL) || contrato.TMOV_T_CGCFIL || "";
+      formFieldsItem.TITMMOV_T_DESCRICAO_CODFILIAL___1 =
+        cleanValue(item.TITMMOV_T_DESCRICAO_CODFILIAL) || contrato.DESCRICAO_CODFILIAL || "";
+      formFieldsItem.TITMMOV_T_CODCCUSTO___1 =
+        cleanValue(item.TITMMOV_T_CODCCUSTO) || contrato.TMOV_T_CODCCUSTO || "";
+      formFieldsItem.TITMMOV_T_DESCRICAO_CODCCUSTO___1 =
+        cleanValue(item.TITMMOV_T_DESCRICAO_CODCCUSTO) || contrato.DESCRICAO_CODCCUSTO || "";
+      formFieldsItem.TITMMOV_T_IDMOV___1 = "-1";
+      formFieldsItem.TITMMOV_T_IDMOVHST___1 = "-1";
+      formFieldsItem.TITMMOV_T_NUMEROSEQUENCIAL___1 = "1";
+      formFieldsItem.TITMMOV_T_NSEQITMMOV___1 = "1";
+      formFieldsItem.TITMMOV_T_SEQF___1 = cleanValue(item.TITMMOV_T_SEQF);
+      formFieldsItem.TITMMOV_T_IDPRD___1 = cleanValue(item.TITMMOV_T_IDPRD);
+      formFieldsItem.TITMMOV_T_CODIGOPRD___1 = cleanValue(item.TITMMOV_T_CODIGOPRD);
+      formFieldsItem.TITMMOV_T_NOMEFANTASIA___1 = cleanValue(item.TITMMOV_T_NOMEFANTASIA);
+      formFieldsItem.TITMMOV_T_CODUND___1 = cleanValue(item.TITMMOV_T_CODUND);
+      formFieldsItem.TITMMOV_T_CODTBORCAMENTO___1 = cleanValue(item.TITMMOV_T_CODTBORCAMENTO);
+      formFieldsItem.TITMMOV_T_CODCOLTBORCAMENTO___1 = "0";
+      formFieldsItem.TITMMOV_T_DESCTBORCAMENTO___1 = cleanValue(item.TITMMOV_T_DESCTBORCAMENTO);
+      formFieldsItem.TITMMOV_T_QUANTIDADE___1 = cleanValue(item.TITMMOV_T_QUANTIDADE);
+      formFieldsItem.TITMMOV_T_PRECOUNITARIO___1 = cleanValue(item.TITMMOV_T_PRECOUNITARIO);
+      formFieldsItem.TITMMOV_T_VALORTOTALITEM___1 = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
+      formFieldsItem.TITMMOV_T_VALORBRUTOITEM___1 = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
+      formFieldsItem.TITMMOV_T_VALORLIQUIDO___1 = cleanValue(item.TITMMOV_T_VALORTOTALITEM);
+      formFieldsItem.TITMMOV_T_VALORDESC___1 = "0.00";
+      formFieldsItem.TITMMOV_T_VALORDESP___1 = "0.00";
+      formFieldsItem.TITMMOV_T_PRECOTOTALEDITADO___1 = "1";
+      formFieldsItem.TITMMOV_T_STATUSF___1 = "A";
+
+      // Cabeçalho da solicitação (TMOV_T_*/TCNT_T_*) deve refletir o emissor (fornecedor) e
+      // o centro de custo DESTE item, não o último selecionado no contrato compartilhado.
+      // Destinatário/Coligada/Filial voltou a ser único por contrato (ColigadaFilialForm),
+      // por isso não é mais sobrescrito aqui.
+      formFieldsItem.TMOV_T_CODCFO =
+        cleanValue(item.TITMMOV_T_CODCFO) || contrato.TMOV_T_CODCFO || "";
+      formFieldsItem.DESCRICAO_CODCFO =
+        cleanValue(item.TITMMOV_T_DESCRICAO_CODCFO) || contrato.DESCRICAO_CODCFO || "";
+      formFieldsItem.TMOV_T_CGCCFO =
+        cleanValue(item.TITMMOV_T_CGCCFO) || contrato.TMOV_T_CGCCFO || "";
+      formFieldsItem.TMOV_T_CODCOLCFO =
+        cleanValue(item.TITMMOV_T_CODCOLCFO) ||
+        contrato.TMOV_T_CODCOLCFO ||
+        contrato.TMOV_T_CODCOLIGADA ||
+        "";
+      formFieldsItem.TMOV_T_CODCCUSTO =
+        cleanValue(item.TITMMOV_T_CODCCUSTO) || contrato.TMOV_T_CODCCUSTO || "";
+      formFieldsItem.DESCRICAO_CODCCUSTO =
+        cleanValue(item.TITMMOV_T_DESCRICAO_CODCCUSTO) || contrato.DESCRICAO_CODCCUSTO || "";
+      formFieldsItem.TCNT_T_CODCCUSTO =
+        cleanValue(item.TITMMOV_T_CODCCUSTO) || contrato.TCNT_T_CODCCUSTO || contrato.TMOV_T_CODCCUSTO || "";
+
+      const keys = Object.keys(formFieldsItem);
+      const formDataResult = keys.map((key) => {
+        return { name: key, value: formFieldsItem[key] };
+      });
+
+      const data = {
+        processInstanceId: 0,
+        processId: "dw_cadastro_de_contrato",
+        version: processVersion,
+        taskUserId: window.WCMAPI.usercode,
+        completeTask: true,
+        currentMovto: 0,
+        managerMode: false,
+        selectedDestinyAfterAutomatic: -1,
+        conditionAfterAutomatic: -1,
+        selectedColleague: [],
+        comments: "Inserido pela tela de cadastro e contrato.",
+        newObservations: [],
+        appointments: [],
+        attachments: anexos,
+        digitalSignature: false,
+        formData: formDataResult,
+        isDigitalSigned: false,
+        versionDoc: 0,
+        selectedState: 587,
+        internalFields: [],
+        transferTaskAfterSelection: false,
+        currentState: 4,
+      };
+      console.log(`data - save item ${item.TITMMOV_T_SEQF}`, data);
+
+      if (isLocal) {
+        results.push(data);
+        continue;
+      }
+
+      try {
+        const d: any = await axios.post("/ecm/api/rest/ecm/workflowView/send", data);
+        const result = d.data.content;
+        results.push(result);
+        if (result.processInstanceId) {
+          window.open(
+            fluigConfig.visualizarProcesso + result.processInstanceId,
+            "_blank",
+          );
+        }
+      } catch (e: any) {
+        erros.push(
+          `Item ${item.TITMMOV_T_NOMEFANTASIA ?? item.TITMMOV_T_SEQF}: ${JSON.stringify(e.response?.data)}`,
+        );
+      }
+    }
+
+    if (!isLocal) {
+      setNotaSelecionada({});
+      setContrato({} as IContratoData);
+      setOpenEdit(false);
+    }
+
+    if (erros.length > 0) {
+      setError(erros.join("\n"));
+      setOpenError(true);
+    }
+
+    return results;
   }
   return { save };
 }

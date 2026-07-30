@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GridRowParams } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
@@ -8,18 +7,12 @@ import ModalSelectorComponent from "../Global/ModalSelectorComponent";
 import { fornecedoresColumns } from "./FornecedoresColumns";
 import { useFornecedorContext } from "./useFornecedorContext";
 export default function FornecedorModalSelect() {
-  const { contrato, setContrato, error } = useContratoContext();
-  const { setOpenFornecedor, fornecedores, openFornecedor, setFornecedores } =
+  const { error } = useContratoContext();
+  const { setOpenFornecedor, fornecedores, openFornecedor, setFornecedores, onSelectFornecedor } =
     useFornecedorContext();
   const [data, setData] = useState<IFornecedor[]>([]);
   function handleRowClick(param: GridRowParams) {
-    setContrato({
-      ...contrato,
-      TMOV_T_CGCCFO: param.row.CGCCFO,
-      TMOV_T_CODCFO: param.row.CODCFO,
-      DESCRICAO_CODCFO: param.row.NOMEFANTASIA,
-      TMOV_T_CODCOLCFO: param.row.CODCOLIGADA
-    });
+    onSelectFornecedor?.(param.row);
     setOpenFornecedor(false);
     setFornecedores([])
   }

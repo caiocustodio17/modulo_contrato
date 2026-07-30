@@ -5,26 +5,19 @@ import { sqlBody } from "../../utils/sqlBody";
 import { useContratoContext } from "../Contratos/hooks/useContratoContext";
 import { useDestinatarioContext } from "./useDestinatarioContext";
 
+export type IBuscaDestinatario = {
+  codColigada?: string;
+  codFilial?: string;
+  nomeFantasia?: string;
+  cnpj?: string;
+};
+
 export default function useDestinatario() {
-  const { contrato, editForm, setContrato, setError } = useContratoContext();
+  const { setError } = useContratoContext();
   const { setDestinatarios, setOpenDestinatario } = useDestinatarioContext();
   const [isLoading, setIsLoading] = useState(false);
-  const readOnly = editForm ? false : true;
-  const focused = editForm;
 
-  function handleClearClick() {
-    setContrato({
-      ...contrato,
-      TMOV_T_CODFILIAL: "",
-      DESCRICAO_CODFILIAL: "",
-      TMOV_T_CGCFIL: "",
-      TMOV_T_CODCOLIGADA: "",
-    });
-  }
-  function handleSearchDestinatarioClick() {
-    getFilais();
-  }
-  async function getFilais() {
+  async function buscarDestinatarios(filtros: IBuscaDestinatario = {}) {
     setDestinatarios([]);
     setIsLoading(true);
     await axios({
@@ -33,13 +26,13 @@ export default function useDestinatario() {
       data: sqlBody({
         codSentenca: "DW.CNT.0005",
         parameters: `CODCOLIGADA=${
-          contrato.TMOV_T_CODCOLIGADA ?? "-1"
+          filtros.codColigada || "-1"
         }|CODFILIAL=${
-          contrato.TMOV_T_CODFILIAL ?? "-1"
+          filtros.codFilial || "-1"
         }|NOMEFANTASIA=${
-          contrato.DESCRICAO_CODFILIAL?? "@"
+          filtros.nomeFantasia || "@"
         }|CNPJ=${
-          contrato.TMOV_T_CGCFIL?? "@"
+          filtros.cnpj || "@"
         }`,
       }),
     })
@@ -60,11 +53,9 @@ export default function useDestinatario() {
         setOpenDestinatario(true);
       });
   }
+
   return {
     isLoading,
-    readOnly,
-    focused,
-    handleClearClick,
-    handleSearchDestinatarioClick,
+    buscarDestinatarios,
   };
 }

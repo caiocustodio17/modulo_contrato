@@ -6,8 +6,8 @@ import ModalSelectorComponent from "../Global/ModalSelectorComponent";
 import { useCentroCustoContext } from "./useCentroCustoContext";
 
 export function CentroCustoModalSelect(){
-  const {openCentroCusto, setOpenCentroCusto, centroCustos, setCentroCustos} = useCentroCustoContext()
-  const {contrato, setContrato, error} = useContratoContext();
+  const {openCentroCusto, setOpenCentroCusto, centroCustos, setCentroCustos, onSelectCentroCusto} = useCentroCustoContext()
+  const {error} = useContratoContext();
   const [data,setData] = useState<ICentroCusto[]>([])
   const columnsCentroCusto :GridColDef[] = [
     {field:'CODCOLIGADA', headerName:'Cód. Coligada', width: 100},
@@ -16,11 +16,7 @@ export function CentroCustoModalSelect(){
   ]
   function handleRowSelectedClick(params: GridRowParams){
     const {row} = params
-    setContrato({
-      ...contrato,
-      TMOV_T_CODCCUSTO: row.CODCCUSTO,
-      DESCRICAO_CODCCUSTO:row.NOME
-    })
+    onSelectCentroCusto?.(row)
     setOpenCentroCusto(false)
     setCentroCustos([])
   }
