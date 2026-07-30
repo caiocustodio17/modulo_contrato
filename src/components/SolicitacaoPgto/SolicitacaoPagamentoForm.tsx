@@ -5,14 +5,15 @@ import DadosPagamentoForm from "./DadosPagamentoForm";
 import HitoricoPagamentoForm from "./HistoricoPagamentoForm";
 import SolicitacaoPagamentoBotoes from "./SolicitacaoPagamentoBotoes";
 import ItensPagamentoForm from "./items/ItensPagamentoForm";
+import DadosBancariosForm from "./formaPagamento/DadosBancariosForm";
 
 export default function SolicitacaoPagamentoForm() {
   const registros = [
     { title: "Dados Pagamento", component: <DadosPagamentoForm /> },
+    { title: "Forma Pagamento", component: <DadosBancariosForm /> },
     { title: "Histório Nota", component: <HitoricoPagamentoForm /> },
     { title: "Items Pagamento", component: <ItensPagamentoForm readOnly /> },
     { title: "Anexos", component: <AnexarDocumentosComponent /> },
-    // { title: "Forma Pagamento", component: <FormaPagamentoForm /> },
   ];
 
   return (

@@ -3,6 +3,7 @@ import { Button, CircularProgress, Grid, TextField } from "@mui/material";
 import { useContratoContext } from "../Contratos/hooks/useContratoContext";
 import FornecedorModalSelect from "./FornecedorModalSelect";
 import useFornedor from "./useFornecedores";
+import sanitizeCnpjCpf from "../../utils/formatCnpjCpf";
 
 export default function FornecedoresForm() {
   const {contrato, setContrato} = useContratoContext()
@@ -59,6 +60,7 @@ export default function FornecedoresForm() {
             id="cgccfo"
             label="Cnpj/Cpf"
             variant="outlined"
+            inputProps={{ maxLength: 14 }}
             InputProps={{
               readOnly,
             }}
@@ -66,7 +68,7 @@ export default function FornecedoresForm() {
             onChange={(e) =>
               setContrato({
                 ...contrato,
-                TMOV_T_CGCCFO: e.target.value.toString(),
+                TMOV_T_CGCCFO: sanitizeCnpjCpf(e.target.value),
               })
             }
           />

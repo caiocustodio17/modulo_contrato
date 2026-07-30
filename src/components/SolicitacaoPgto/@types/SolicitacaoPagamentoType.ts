@@ -42,6 +42,11 @@ export const initialTmov = {
   TMOV_T_CHAVEACESSONFE: "",
   TMOV_T_DESCIDFORMAPAGTO: "",
   TMOV_T_IDFORMAPAGTO: "",
+  FDADOSPGTO_T_NUMEROBANCO: "",
+  FDADOSPGTO_T_CODIGOAGENCIA: "",
+  FDADOSPGTO_T_DIGITOAGENCIA: "",
+  FDADOSPGTO_T_CONTACORRENTE: "",
+  FDADOSPGTO_T_DIGITOCONTA: "",
   TF_T_TIPOCANCEL: "",
   TMOVCOMPL_T_IDV360: "",
   OPTASIMPLES: "",
@@ -221,3 +226,21 @@ export type ITmovpagto = Partial<typeof initialTmovpagto> & {
   TMOVPAGTO_T_SEQF: string;
 };
 export type ISolicitacaoPagamento = Partial<typeof initialSolicitacaoPagamento>;
+
+export type IFormaPagtoForn = {
+  IDPGTO: string;
+  DESCRICAO: string;
+  NUMEROBANCO: string;
+  CODIGOAGENCIA: string;
+  DIGITOAGENCIA: string;
+  CONTACORRENTE: string;
+  DIGITOCONTA: string;
+  NOMEAGENCIA: string;
+  FAVORECIDO: string;
+  CGCFAVORECIDO: string;
+  FORMAPAGAMENTO: string;
+  TIPOCONTA: string;
+  BUSCADOR: string;
+  TIPOPIX: string;
+  CHAVE: string;
+};

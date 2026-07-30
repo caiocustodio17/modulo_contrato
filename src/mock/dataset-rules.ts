@@ -14,6 +14,7 @@ import { responsaveisRmMock } from "./data/responsaveisRm";
 import { papeisMock } from "./data/papeis";
 import { fornecerdoresRmMock } from "./data/fornecedoresRm";
 import { produtosRmMock } from "./data/produtosRm";
+import { formaPagtoFornMock } from "./data/formaPagtoForn";
 
 export type DatasetBody = {
   name?: string;
@@ -79,6 +80,11 @@ export const DATASET_RULES: MockRule[] = [
     id: "produtosRm",
     match: sentenca("FL.DS.G.1"),
     values: produtosRmMock,
+  },
+  {
+    id: "formaPagtoForn",
+    match: sentenca("FL.DS.G.4.002"),
+    values: formaPagtoFornMock,
   },
 
   // ds_dw_sql — keyed on substrings unique to each query.

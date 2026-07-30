@@ -3,6 +3,7 @@ import { Button, CircularProgress, Grid, TextField } from "@mui/material";
 import { useContratoContext } from "../Contratos/hooks/useContratoContext";
 import { DestinatarioModalSelect } from "./DestinatarioModalSelect";
 import useDestinatario from "./useDestinatario";
+import sanitizeCnpjCpf from "../../utils/formatCnpjCpf";
 
 export default function DestinatarioForm() {
   const {contrato, setContrato} = useContratoContext()
@@ -18,6 +19,8 @@ export default function DestinatarioForm() {
           id="codcoligada"
           label="Cód. Coligada"
           variant="outlined"
+          //Adicionado type number para que o campo aceite apenas números 09/07/2026
+          type="number"
           InputProps={{
             readOnly,
           }}
@@ -35,6 +38,8 @@ export default function DestinatarioForm() {
           id="codFilial"
           label="Cód. Filial"
           variant="outlined"
+          //Adicionado type number para que o campo aceite apenas números 09/07/2026
+          type="number"
           InputProps={{
             readOnly,
           }}
@@ -69,12 +74,13 @@ export default function DestinatarioForm() {
           id="cgccfo"
           label="Cnpj/Cpf"
           variant="outlined"
+          inputProps={{ maxLength: 14 }}
           InputProps={{
             readOnly,
           }}
           value={contrato.TMOV_T_CGCFIL ?? ""}
           onChange={(e) =>
-            setContrato({ ...contrato, TMOV_T_CGCFIL: e.target.value })
+            setContrato({ ...contrato, TMOV_T_CGCFIL: sanitizeCnpjCpf(e.target.value) })
           }
         />
       </Grid>

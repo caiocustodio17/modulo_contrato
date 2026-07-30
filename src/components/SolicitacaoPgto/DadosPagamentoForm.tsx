@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useContratoContext } from "../Contratos/hooks/useContratoContext";
 import { ITaxDocument } from "../Notas/@types/INotasTypes";
 import useSolicitacaoPagamentoContext from "./useSolicitacaoPagamentoContext";
+import VencimentoTextField from "./VencimentoTextField";
 
 const modalidadeLIst = [
   {
@@ -43,8 +44,8 @@ export default function DadosPagamentoForm() {
       ? notaSelecioanda.number.toString()
       : "")
   );
-  const [dataEmissao, setDataEmissao] = useState(
-    paramEmissao || (notaSelecioanda ? notaSelecioanda.issue_date : "")
+  const [dataEmissao, setDataEmissao] = useState<string>(
+    paramEmissao || notaSelecioanda?.issue_date || ""
   );
   const [tipo, setTipo] = useState(
     paramTipo || (notaSelecioanda.model_type
@@ -53,8 +54,8 @@ export default function DadosPagamentoForm() {
         : "P"
       : "")
   );
-  const [chaveAcesso, setChaveAcesso] = useState(
-    paramChaveAcessoNFE || (notaSelecioanda ? notaSelecioanda.access_key : "")
+  const [chaveAcesso, setChaveAcesso] = useState<string>(
+    paramChaveAcessoNFE || notaSelecioanda?.access_key || ""
   );
 
   function formatarNumeroNota(valor: string | number): string {
@@ -177,7 +178,7 @@ export default function DadosPagamentoForm() {
             ))}
           </TextField>
         </Grid>
-        <Grid item xs={12} sm={12} md={3}>
+        {/* <Grid item xs={12} sm={12} md={3}>
           <TextField
             fullWidth
             size="small"
@@ -188,6 +189,14 @@ export default function DadosPagamentoForm() {
             type="date"
             onChange={(e) => setDataVencimento(e.target.value)}
             value={dataVencimento}
+          />
+        </Grid> */}
+        <Grid item xs={12} sm={12} md={3}>
+          <VencimentoTextField
+            modalidade={modalidade}
+            dataEmissao={dataEmissao}
+            value={dataVencimento}
+            onChange={setDataVencimento}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
